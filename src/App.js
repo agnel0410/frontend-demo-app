@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
 
-function App() {
+function App(props) {
+  const [showResult, setShowResult] = useState(false);
+  const [apiMessage, setApiMessage] = useState("");
+
+  const getApiMessage = async () => {
+    
+    console.log(process.env.REACT_APP_ENDPOINT);
+    const response = await fetch(`${process.env.REACT_APP_ENDPOINT}hello`, {
+      mode: 'cors'
+    })
+
+    const responseData = response.text()
+    console.log(responseData)
+
+    setShowResult(true)
+    setApiMessage(responseData)
+  }
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>
+          CALL AN API
+        </h1>
+        <button onClick={getApiMessage}></button>
+        <div>
+          {showResult && <code> {JSON.stringify(apiMessage, null, 2)}</code>}
+        </div>
       </header>
+      
     </div>
   );
 }
